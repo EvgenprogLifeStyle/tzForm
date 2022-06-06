@@ -1,0 +1,14 @@
+@import "fonts";
+
+$fontFamily : 'Roboto', sans-serif;
+@import "null";
+
+
+body {
+  margin: 0;
+  font-family: $fontFamily;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #F5F5F5;
+  display: flex;
+}
