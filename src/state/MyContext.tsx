@@ -1,18 +1,20 @@
 import React from "react";
-
-export interface StoreProps {
-    isAuth: boolean;
-    email: string | null;
-    password: string | null;
-    toggle: () => void;
-
-}
+import {StoreProps} from "../types/types";
 
 export const store: StoreProps = {
     isAuth: false,
     email: null,
     password: null,
-    toggle: () => null
 }
-const MyContext = React.createContext<StoreProps | false>(false)
+
+export const MyContext = React.createContext<{
+    state: StoreProps;
+    dispatch: React.Dispatch<any>;
+}>
+({
+    state: store,
+    dispatch: () => null
+})
+
+
 export default MyContext

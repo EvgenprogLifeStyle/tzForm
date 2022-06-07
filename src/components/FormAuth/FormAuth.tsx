@@ -1,6 +1,10 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import styled from "styled-components";
 import {useForm} from "react-hook-form";
+import MyContext from "../../state/MyContext";
+
+import {loginDispatch} from "../../state/Reducer";
+import {FormInputs} from "../../types/types";
 
 const FormControl = styled.div`
   margin-bottom: 14px;
@@ -18,6 +22,12 @@ const ResetLink = styled.a`
   line-height: 20px;
   letter-spacing: 0.25px;
   color: #818181;
+  transition: 0.3s;
+
+  &:hover {
+    color: #505050;
+  }
+
 `
 
 const FormSend = styled.button`
@@ -49,6 +59,11 @@ const InputForm = styled.input`
   letter-spacing: 0.44px;
   color: #4f4f4f;
   transition: 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba(27, 27, 27, 0.6);
+  }
 
   &:focus {
     border-color: #1877F2;
@@ -59,38 +74,42 @@ const InputForm = styled.input`
     opacity: 0.38;
   }
 `
+const WrapperSuccess = styled.div`
+  font-size: 26px;
+  color: #282c34;
+  height: 182.98px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
-type FormInputs = {
-    email: string;
-    password: string;
-};
 
+const FormAuth: FC = () => {
 
-const FormAuth:FC = () => {
-    const [auth, setIsAuth] = useState(false)
-    const {register, handleSubmit, setError, formState: {errors}} = useForm<FormInputs>();
+    const context = React.useContext(MyContext)
 
-    const onSubmit = (data: FormInputs) => {
-        setIsAuth(true)
-    };
+    const {register, handleSubmit, formState: {errors}} = useForm<FormInputs>();
+    const onSubmit = (data: FormInputs) =>
+        context.dispatch(loginDispatch({isAuth: true, email: data.email, password: data.password}))
+
 
     return <>
-        {!auth ?
+        {!context.state.isAuth ?
             <form onSubmit={handleSubmit(onSubmit)} className="form__body">
                 <FormControl>
-                    <InputForm type="text" placeholder="E-mail" {...register("email", {required: true})} />
-                    {errors.email && <p>{errors.email.message}</p>}
+                    <InputForm type="email" placeholder="E-mail" {...register("email", {required: true})} />
+                    {/*{errors.email && <p>{errors.email.message}</p>}*/}
                 </FormControl>
                 <FormControl>
                     <InputForm type="password" placeholder="Password" {...register("password", {required: true})}/>
-                    {errors.password && <p>{errors.password.message}</p>}
+
                 </FormControl>
                 <FormControlBottom>
                     <ResetLink href="#">Reset password</ResetLink>
                     <FormSend>Log in</FormSend>
                 </FormControlBottom>
             </form>
-            : <div>Вы авторизованы</div>}
+            : <WrapperSuccess>Вы авторизованы</WrapperSuccess>}
     </>
 };
 

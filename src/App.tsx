@@ -3,6 +3,8 @@ import styled from "styled-components";
 import TabForm from "./components/TabForm/TabForm";
 import ListBtn from "./components/ListBtn/ListBtn";
 import FormAuthContainer from "./components/FormAuth/FormAuthContainer";
+import MyContext, { store} from "./state/MyContext";
+import {Reducer} from "./state/Reducer";
 
 const AppWrapper = styled.div`
   width: 449px;
@@ -30,6 +32,7 @@ const FormBottom = styled.div`
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0.25px;
+  text-align: center;
 
   span {
     color: #1B1B1B;
@@ -40,11 +43,18 @@ const FormBottom = styled.div`
   a {
     font-weight: 700;
     color: #5578F6;
+    transition: 0.3s;
+
+    &:hover {
+      color: #2d54f1;
+    }
   }`
 
 function App() {
+    const [state, dispatch] = React.useReducer( Reducer,store)
+
     return (
-        <div>
+        <MyContext.Provider value={{state, dispatch}}>
             <AppWrapper>
                 <TabForm/>
                 <FormWrapper>
@@ -55,8 +65,10 @@ function App() {
                     <span>No account?</span> <a href="#">Create one</a>
                 </FormBottom>
             </AppWrapper>
-        </div>
+        </MyContext.Provider>
     );
 }
+
+
 
 export default App;
